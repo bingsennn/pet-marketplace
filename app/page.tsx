@@ -9,6 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const SPECIES_OPTIONS: string[] = ["bird", "cat", "dog", "rabbit"];
 const SIZE_OPTIONS: string[] = ["small", "medium", "large"];
@@ -36,6 +44,7 @@ export default function Home() {
   const [species, setSpecies] = useState<string>("");
   const [size, setSize] = useState<string>("");
   const [available, setAvailable] = useState<AvailableFilter>("all");
+  const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
 
   const fetchPets = useCallback(() => {
     setLoading(true);
@@ -114,7 +123,16 @@ export default function Home() {
         {pets.map((pet) => (
           <Card
             key={pet.id}
-            className={pet.available ? "" : "opacity-70 ring-muted-foreground/30"}
+            className={`cursor-pointer transition-opacity hover:opacity-90 ${pet.available ? "" : "opacity-70 ring-muted-foreground/30"}`}
+            onClick={() => setSelectedPet(pet)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setSelectedPet(pet);
+              }
+            }}
+            role="button"
+            tabIndex={0}
           >
             <img
               src={pet.image_url}
@@ -138,6 +156,46 @@ export default function Home() {
           </Card>
         ))}
       </div>
+
+      <Dialog open={selectedPet !== null} onOpenChange={(open) => !open && setSelectedPet(null)}>
+        <DialogContent className="sm:max-w-md" showCloseButton>
+          {selectedPet !== null && (
+            <>
+              <img
+                src={selectedPet.image_url}
+                alt={selectedPet.name}
+                className="aspect-[4/3] w-full rounded-lg object-cover"
+              />
+              <DialogHeader>
+                <DialogTitle>{selectedPet.name}</DialogTitle>
+                <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm text-muted-foreground" aria-label="Pet details">
+                  <dt className="text-muted-foreground">Species</dt>
+                  <dd className="text-foreground">{selectedPet.species}</dd>
+                  <dt className="text-muted-foreground">Age</dt>
+                  <dd className="text-foreground">{selectedPet.age_months} months</dd>
+                  <dt className="text-muted-foreground">Size</dt>
+                  <dd className="text-foreground">{selectedPet.size}</dd>
+                  <dt className="text-muted-foreground">Price</dt>
+                  <dd className="text-foreground">${selectedPet.price}</dd>
+                  <dt className="text-muted-foreground">Availability</dt>
+                  <dd className="text-foreground">{selectedPet.available ? "Available" : "Unavailable"}</dd>
+                </dl>
+              </DialogHeader>
+              <DialogFooter showCloseButton={false}>
+                {selectedPet.available ? (
+                  <Button onClick={() => {/* TODO: open inquiry form */}}>
+                    Inquire
+                  </Button>
+                ) : (
+                  <p className="w-full text-sm text-muted-foreground">
+                    This pet is not available for inquiry at the moment. Please check back later or browse other pets.
+                  </p>
+                )}
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
