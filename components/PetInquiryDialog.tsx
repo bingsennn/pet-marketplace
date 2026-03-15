@@ -33,11 +33,15 @@ function formatReceivedAt(iso: string): string {
 export function PetInquiryDialog({ selectedPet, onClose }: PetInquiryDialogProps) {
   const [inquiryView, setInquiryView] = useState<InquiryView>("detail");
   const [inquiryResult, setInquiryResult] = useState<InquiryResponse | null>(null);
+  const [hasDetailImageError, setHasDetailImageError] = useState<boolean>(false);
+  const fallbackImageSrc: string =
+    "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='100%' height='100%' fill='%23e5e7eb'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%236b7280' font-family='Arial,sans-serif' font-size='28'>Image unavailable</text></svg>";
 
   useEffect(() => {
     if (selectedPet !== null) {
       setInquiryView("detail");
       setInquiryResult(null);
+      setHasDetailImageError(false);
     }
   }, [selectedPet]);
 
@@ -52,9 +56,10 @@ export function PetInquiryDialog({ selectedPet, onClose }: PetInquiryDialogProps
         {selectedPet !== null && inquiryView === "detail" && (
           <>
             <img
-              src={selectedPet.image_url}
+              src={hasDetailImageError ? fallbackImageSrc : selectedPet.image_url}
               alt={selectedPet.name}
               className="aspect-[4/3] w-full rounded-lg object-cover"
+              onError={() => setHasDetailImageError(true)}
             />
             <DialogHeader>
               <DialogTitle>{selectedPet.name}</DialogTitle>
