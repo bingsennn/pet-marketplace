@@ -73,17 +73,27 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="grid w-full max-w-2xl gap-4 sm:grid-cols-2">
+      <div className="w-full max-w-2xl columns-1 gap-4 sm:columns-2">
         {isInitialLoading ? (
           <>
-            <PetCardSkeleton />
-            <PetCardSkeleton />
-            <PetCardSkeleton />
-            <PetCardSkeleton />
+            <div className="mb-4 break-inside-avoid">
+              <PetCardSkeleton />
+            </div>
+            <div className="mb-4 break-inside-avoid">
+              <PetCardSkeleton />
+            </div>
+            <div className="mb-4 break-inside-avoid">
+              <PetCardSkeleton />
+            </div>
+            <div className="mb-4 break-inside-avoid">
+              <PetCardSkeleton />
+            </div>
           </>
         ) : (
           pets.map((pet) => (
-            <PetCard key={pet.id} pet={pet} onSelect={setSelectedPet} />
+            <div key={pet.id} className="mb-4 break-inside-avoid">
+              <PetCard pet={pet} onSelect={setSelectedPet} />
+            </div>
           ))
         )}
       </div>

@@ -20,7 +20,7 @@ export function PetCard({ pet, onSelect }: PetCardProps) {
 
   return (
     <Card
-      className={`cursor-pointer transition-opacity hover:opacity-90 ${pet.available ? "" : "opacity-70 ring-muted-foreground/30"}`}
+      className={`cursor-pointer transition-opacity hover:opacity-90 ${pet.available ? "" : "opacity-30 ring-muted-foreground/30"}`}
       onClick={() => onSelect(pet)}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -34,7 +34,7 @@ export function PetCard({ pet, onSelect }: PetCardProps) {
       <img
         src={hasImageError ? fallbackImageSrc : pet.image_url}
         alt={pet.name}
-        className="aspect-[4/3] w-full object-cover"
+        className="w-full object-cover"
         onError={() => setHasImageError(true)}
       />
       <CardHeader>
