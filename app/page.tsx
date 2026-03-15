@@ -2,13 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { InquiryFieldErrors, InquiryResponse, Pet } from "@/lib/pets";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PetCard } from "@/components/PetCard";
 import {
   Dialog,
   DialogContent,
@@ -155,39 +149,7 @@ export default function Home() {
 
       <div className="grid w-full max-w-2xl gap-4 sm:grid-cols-2">
         {pets.map((pet) => (
-          <Card
-            key={pet.id}
-            className={`cursor-pointer transition-opacity hover:opacity-90 ${pet.available ? "" : "opacity-70 ring-muted-foreground/30"}`}
-            onClick={() => setSelectedPet(pet)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                setSelectedPet(pet);
-              }
-            }}
-            role="button"
-            tabIndex={0}
-          >
-            <img
-              src={pet.image_url}
-              alt={pet.name}
-              className="aspect-[4/3] w-full object-cover"
-            />
-            <CardHeader>
-              <CardTitle>{pet.name}</CardTitle>
-              <CardDescription>
-                {pet.species} · {pet.age_months}mo · {pet.size}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="text-sm">
-              <span className="font-medium">${pet.price}</span>
-              {pet.available ? (
-                <span className="text-muted-foreground"> · Available</span>
-              ) : (
-                <span className="text-muted-foreground"> · Unavailable</span>
-              )}
-            </CardContent>
-          </Card>
+          <PetCard key={pet.id} pet={pet} onSelect={setSelectedPet} />
         ))}
       </div>
 
