@@ -6,12 +6,12 @@ import { Skeleton } from "@/components/ui/skeleton"
 function PetCardSkeleton(): ReactElement {
   return (
     <Card className="gap-0 py-0">
-      <Skeleton className="aspect-[4/3] w-full rounded-none" />
-      <CardHeader>
+      <Skeleton className="aspect-square w-full rounded-none" />
+      <CardHeader className="pt-3 pb-3">
         <Skeleton className="h-5 w-2/3" />
         <Skeleton className="h-4 w-1/2" />
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0 pb-4">
         <Skeleton className="h-4 w-1/3" />
       </CardContent>
     </Card>
